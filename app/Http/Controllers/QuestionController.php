@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Question;
+use App\Model\Question;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\QuestionResource;
 
 class QuestionController extends Controller
 {
@@ -14,7 +16,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        return QuestionResource::collection(Question::all());
     }
 
     /**
@@ -35,7 +37,18 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //Question::create($request->all());
+        $question = new Question;
+
+        $question->title = $request->title;
+        $question->slug = $request->slug;
+        $question->body = $request->body;
+        $question->category_id = $request->category_id;
+        $question->user_id = $request->user_id;
+
+        $question->save();
+
+         response ('Created', Respnse::HTTP_CREATED);
     }
 
     /**
@@ -46,7 +59,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
-        //
+        return new QuestionResource($question);
     }
 
     /**
@@ -80,6 +93,7 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        $question->delete();
+        response ('Deleted', 204);
     }
 }
