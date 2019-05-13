@@ -37,18 +37,8 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //Question::create($request->all());
-        $question = new Question;
-
-        $question->title = $request->title;
-        $question->slug = $request->slug;
-        $question->body = $request->body;
-        $question->category_id = $request->category_id;
-        $question->user_id = $request->user_id;
-
-        $question->save();
-
-         response ('Created', Respnse::HTTP_CREATED);
+        Question::create($request->all());
+        return response ('Created', Response::HTTP_CREATED);
     }
 
     /**
@@ -82,7 +72,8 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        //
+        $question->update($request->all());
+        return response('Update', Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -94,6 +85,6 @@ class QuestionController extends Controller
     public function destroy(Question $question)
     {
         $question->delete();
-        response ('Deleted', 204);
+        return response('Deleted', 204);
     }
 }
